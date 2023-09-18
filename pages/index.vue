@@ -1,3 +1,3 @@
 <template>
-  ioasdfasdfioj
+  (coming soon)
 </template>
