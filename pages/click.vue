@@ -8,7 +8,7 @@ enum GAME_STATES {LOADING, READY,PLAYING,GAME_OVER}
 const defaults = {
     coinSize: 100,
     timeLimit: 60,
-    newCoinInterval: 45,
+    newCoinInterval: 0,
     startingCoins: 1,
     showPlayAgain: false,
     useSound: true
