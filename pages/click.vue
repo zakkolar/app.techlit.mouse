@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {getParam, hashToParams, PARAM_TYPES} from "~/utilities/UrlParams";
+import Coin from "~/components/click/Coin.vue";
 
 enum GAME_STATES {LOADING, READY,PLAYING,GAME_OVER}
 
