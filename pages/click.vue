@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {getParam, hashToParams, PARAM_TYPES} from "~/utilities/UrlParams";
 import Coin from "~/components/click/Coin.vue";
+import {getMinutes, getSeconds} from "~/utilities/MinutesAndSeconds";
 
 enum GAME_STATES {LOADING, READY,PLAYING,GAME_OVER}
 
@@ -26,8 +27,8 @@ const coinSize = ref(defaults.coinSize),
     gameState = ref(GAME_STATES.LOADING),
 
     timeRemaining = ref(timeLimit.value),
-    minutes = computed(() => Math.floor(timeRemaining.value/60).toString().padStart(2, '0')),
-    seconds = computed(() => (timeRemaining.value % 60).toString().padStart(2,'0')),
+    minutes = computed(() => getMinutes(timeRemaining.value)),
+    seconds = computed(() => getSeconds(timeRemaining.value)),
 
     collectedCoins = ref(0),
     numCoins = ref(1),
