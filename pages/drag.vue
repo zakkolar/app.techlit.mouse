@@ -36,7 +36,9 @@ const treeWidth = ref(-1),
 
     collectedApples = ref(0),
     numApples = ref(startingApples),
-    newAppleCounter = ref(0)
+    newAppleCounter = ref(0),
+
+    draggedApples = ref(0)
 
 
 onMounted(() => {
@@ -148,9 +150,25 @@ function updateTimer() {
             setTimeout(updateTimer, 1000);
         }
         else {
-            gameState.value = GAME_STATES.GAME_OVER;
+            checkGameOver();
         }
     }
+}
+
+function checkGameOver() {
+    if(timeRemaining.value === 0 && draggedApples.value === 0) {
+        gameState.value = GAME_STATES.GAME_OVER;
+
+    }
+}
+
+function handleDragStart() {
+    draggedApples.value++;
+}
+
+function handleDragEnd() {
+    draggedApples.value--;
+    checkGameOver();
 }
 
 </script>
@@ -168,7 +186,10 @@ function updateTimer() {
                         height="10vh"
                         :initial-x="apple.x"
                         :initial-y="apple.y"
-                        :initial-color="apple.color">
+                        :initial-color="apple.color"
+                        @dragstart="handleDragStart"
+                        @dragend="handleDragEnd"
+        >
         </DraggableApple>
         <Basket ref="basket"
                 @apple-drop="handleAppleDrop"
