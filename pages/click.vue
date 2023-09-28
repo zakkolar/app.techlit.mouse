@@ -4,6 +4,17 @@ import {getParam, hashToParams, PARAM_TYPES} from "~/utilities/UrlParams";
 import Coin from "~/components/click/Coin.vue";
 import {getMinutes, getSeconds} from "~/utilities/MinutesAndSeconds";
 
+useHead({
+    title: 'Coin Collector',
+    link: [
+        {
+            rel: 'icon',
+            type: 'image/x-icon',
+            href: '/icons/coin.ico'
+        }
+    ]
+})
+
 enum GAME_STATES {LOADING, READY,PLAYING,GAME_OVER}
 
 const defaults = {

@@ -4,6 +4,17 @@ import DraggableApple from "~/components/drag/DraggableApple.vue";
 import {getMinutes, getSeconds} from "~/utilities/MinutesAndSeconds";
 import {getParam, hashToParams, PARAM_TYPES} from "~/utilities/UrlParams";
 
+useHead({
+    title: 'Apple Picker',
+    link: [
+        {
+            rel: 'icon',
+            type: 'image/x-icon',
+            href: '/icons/apple.ico'
+        }
+    ]
+})
+
 enum GAME_STATES {LOADING, READY,PLAYING,GAME_OVER}
 
 const defaults = {
