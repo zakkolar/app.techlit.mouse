@@ -1,3 +1,8 @@
+<script setup>
+useHead({
+    titleTemplate: (title) => title ? `${title} - Mouse Practice` : `Mouse Practice`
+})
+</script>
 <template>
   <div>
     <NuxtPage />
