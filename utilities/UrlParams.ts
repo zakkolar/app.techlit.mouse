@@ -1,5 +1,5 @@
 /**
- * Gets the current value of a parameter from a map of parameters. Returns default value if ont found.
+ * Gets the current value of a parameter from a map of parameters. Returns default value if not found.
  * @param params
  * @param paramName
  * @param type
