@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "preview_link": "https://mouse.techlit.app/click",
-  "title": "Mouse Practice - Clicking",
+  "preview_link": "https://mouse.techlit.app/drag",
+  "title": "Mouse Practice - Dragging",
   "fields": [
     {
       "label": "Time Limit",
