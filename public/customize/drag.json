@@ -2,6 +2,7 @@
   "version": "1.0",
   "preview_link": "https://mouse.techlit.app/drag",
   "title": "Mouse Practice - Dragging",
+  "format": "queryString",
   "fields": [
     {
       "label": "Time Limit",
