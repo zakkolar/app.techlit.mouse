@@ -25,6 +25,7 @@ const games = ref([
     <div class="prose text-center mx-auto p-4">
         <h1>Mouse practice games</h1>
         <p>A collection of games to practice mouse/trackpad skills.</p>
+        <p><a href="https://techlit.tools/about">About</a> | <a href="https://docs.techlit.tools/mouse-games/privacy/">Privacy</a></p>
     </div>
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 max-w-prose m-auto">
             <div v-for="game of games" class="p-4">
@@ -32,7 +33,7 @@ const games = ref([
                     <img :src="game.thumbnail" class="object-contain" :alt="game.thumbnailAlt">
                 </div>
 
-                <h2 class="mb-2 mt-6 text-center">{{game.title}}</h2>
+                <h2 class="mb-2 text-2xl mt-6 text-center">{{game.title}}</h2>
                 <p class="text-center italic mb-0">{{game.subtitle}}</p>
                 <p class="mt-2 text-center">{{game.description}}</p>
                 <div class="text-center">
