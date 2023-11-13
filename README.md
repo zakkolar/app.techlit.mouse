@@ -1,8 +1,12 @@
-# Nuxt 3 Minimal Starter
+# Mouse Games
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a collection of games to help players use a mouse/trackpad. Each game can be customized via URL parameters. You can [try the demo](https://mouse.techlit.app) or [read the docs](https://docs.techlit.tools/mouse-games)
 
-## Setup
+## Development
+
+This site is built with [Nuxt](https://nuxt.com/) and available under the MIT License. You are free to use/modify it as you see fit as long as you follow the license requirements.
+
+### Setup
 
 Make sure to install the dependencies:
 
@@ -17,7 +21,7 @@ pnpm install
 yarn install
 ```
 
-## Development Server
+### Development Server
 
 Start the development server on `http://localhost:3000`:
 
@@ -32,7 +36,7 @@ pnpm run dev
 yarn dev
 ```
 
-## Production
+### Production
 
 Build the application for production:
 
