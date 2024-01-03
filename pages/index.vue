@@ -30,7 +30,7 @@ const games = ref([
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 max-w-prose m-auto">
             <div v-for="game of games" class="p-4">
                 <div class="w-40 h-40 mx-auto">
-                    <img :src="game.thumbnail" class="object-contain" :alt="game.thumbnailAlt">
+                    <router-link :to="game.page"><img :src="game.thumbnail" class="object-contain" :alt="game.thumbnailAlt"></router-link>
                 </div>
 
                 <h2 class="mb-2 text-2xl mt-6 text-center">{{game.title}}</h2>
