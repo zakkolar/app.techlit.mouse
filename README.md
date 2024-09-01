@@ -1,6 +1,6 @@
 # Mouse Games
 
-This is a collection of games to help players use a mouse/trackpad. Each game can be customized via URL parameters. You can [try the demo](https://mouse.techlit.app) or [read the docs](https://docs.techlit.tools/mouse-games)
+This is a collection of games to help players use a mouse/trackpad. Each game can be customized via URL parameters. You can [try the demo](https://mouse.techlit.tools) or [read the docs](https://docs.techlit.tools/mouse-games)
 
 ## Development
 

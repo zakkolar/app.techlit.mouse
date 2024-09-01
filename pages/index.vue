@@ -5,7 +5,7 @@ const games = ref([
         subtitle: "Clicking practice",
         description: "Click as many coins as you can before the time runs out.",
         page: "/click",
-        customize: "https://customize.techlit.tools/#url=https://mouse.techlit.app/customize/click.json",
+        customize: "https://customize.techlit.tools/#url=https://mouse.techlit.tools/customize/click.json",
         documentation: "https://docs.techlit.tools/mouse-games/click/",
         thumbnail: "/images/coin.png",
         thumbnailAlt: "Illustration of a gold coin on a blue background"
@@ -14,7 +14,7 @@ const games = ref([
         subtitle: "Dragging practice",
         description: "Drag as many apples to the basket as you can before the time runs out.",
         page: "/drag",
-        customize: "https://customize.techlit.tools/#url=https://mouse.techlit.app/customize/drag.json",
+        customize: "https://customize.techlit.tools/#url=https://mouse.techlit.tools/customize/drag.json",
         documentation: "https://docs.techlit.tools/mouse-games/drag/",
         thumbnail: "/images/apple.png",
         thumbnailAlt: "Illustration of a red apple on a green background"
