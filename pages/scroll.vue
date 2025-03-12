@@ -114,7 +114,7 @@ const handleClick = item => {
     </div>
 
     <div id="prompt" class="text-white flex px-8">
-        <p class="inline-block text-[6vh] my-auto">I spy...</p>
+        <p class="inline-block text-[6vh] my-auto">Can you find a {{currentItem.name}}?</p>
       <div class="ml-5 my-auto inline-block">
         <component :is="currentItem.component" class="relative" height="8vh" ></component>
       </div>
@@ -123,7 +123,7 @@ const handleClick = item => {
 <style>
 
 body {
-    --prompt-height: 15vh;
+    --prompt-height: 20vh;
 }
 
 
@@ -148,7 +148,7 @@ body {
 #sky {
     @apply section;
     background-color: var(---sky);
-    height: 75vh;
+    height: 90vh;
 
 }
 

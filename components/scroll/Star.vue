@@ -29,7 +29,7 @@ const style = computed(() => {
     if (props.randomize) {
         scale = Math.random();
         const x = Math.random() * 100;
-        const y = Math.random() * 80;
+        const y = Math.random() * 45;
         style += `top: ${y}%; left: ${x}%;`;
     }
 
