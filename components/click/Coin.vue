@@ -84,6 +84,7 @@ watch([() => props.yMin, () => props.yMax, () => props.xMin, () => props.xMax], 
 	position: absolute;
     -webkit-transform-style: preserve-3d;
 	animation: spin 2.46s linear infinite;
+  cursor: pointer;
 
 	@keyframes spin{
 		0%{
