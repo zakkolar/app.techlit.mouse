@@ -269,7 +269,7 @@ const props = defineProps({
     /* Update container to be absolute positioned within parent */
     position: absolute;
 
-     animation: flight 20s linear infinite;
+     animation: flight 50s linear infinite;
     transform: rotate(90deg);
 
   }
