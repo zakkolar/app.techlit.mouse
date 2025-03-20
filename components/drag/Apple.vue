@@ -77,8 +77,7 @@ const props = defineProps({
 	border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
   border-top-right-radius: 50%;
-  //position: relative;
-  //left: calc(0.14 * var(--height));
+
     position: absolute;
   left: calc(0 * var(--height));
     top:0;
