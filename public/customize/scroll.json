@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "preview_link": "https://mouse.techlit.tools/scroll",
+  "title": "Mouse Practice - Scrolling",
+  "format": "queryString",
+  "fields": [
+    {
+      "label": "Time Limit",
+      "key": "timeLimit",
+      "type": "number",
+      "default": 60,
+      "description": "Game time limit in seconds"
+    },
+    {
+      "label": "Show Play Again",
+      "key": "showPlayAgain",
+      "type": "boolean",
+      "default": false,
+      "description": "Show the player a \"play again\" button after the game ends"
+    },
+    {
+      "label": "Use Sound",
+      "key": "useSound",
+      "type": "boolean",
+      "default": true,
+      "description": "Play sound effects during gameplay"
+    },
+    {
+      "label": "Disable Arrow Keys",
+      "key": "disableArrowKeys",
+      "type": "boolean",
+      "default": false,
+      "description": "Prevent arrow keys from being used for scrolling"
+    },
+    {
+      "label": "Disable Touch Screen",
+      "key": "disableTouchScreen",
+      "type": "boolean",
+      "default": false,
+      "description": "Prevent touch screen interactions"
+    }
+  ]
+}
