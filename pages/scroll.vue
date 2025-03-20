@@ -21,14 +21,16 @@ const defaults = {
   timeLimit: 60,
   showPlayAgain: false,
   useSound: true,
-  disableArrowKeys: false
+  disableArrowKeys: false,
+  disableTouchScreen: false
 }
 
 // user settings
 const timeLimit = ref(defaults.timeLimit),
     showPlayAgain = ref(defaults.showPlayAgain),
     useSound = ref(defaults.useSound),
-    disableArrowKeys = ref(defaults.disableArrowKeys);
+    disableArrowKeys = ref(defaults.disableArrowKeys)
+disableTouchScreen = ref(defaults.disableTouchScreen);
 
 // internal data
 const gameState = ref(GAME_STATES.LOADING),
@@ -90,6 +92,23 @@ onMounted(() => {
     }
 
   })
+
+  const touchEvents = [
+    'touchstart',
+    'touchmove',
+    'touchend',
+    'touchcancel'
+  ];
+
+  touchEvents.forEach(eventType => {
+    document.addEventListener(eventType, (e) => {
+      if (disableTouchScreen.value) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, {passive: false});
+  });
+
 })
 
 function updateGameSettingsFromHash() {
@@ -100,6 +119,10 @@ function updateGameSettingsFromHash() {
   showPlayAgain.value = getParam(params, 'showPlayAgain', PARAM_TYPES.BOOLEAN, defaults.showPlayAgain);
   // disable the arrow keys for scrolling
   disableArrowKeys.value = getParam(params, 'disableArrowKeys', PARAM_TYPES.BOOLEAN, defaults.disableArrowKeys);
+
+  // disable any touch events
+  disableTouchScreen.value = getParam(params, 'disableTouchScreen', PARAM_TYPES.BOOLEAN, defaults.disableTouchScreen);
+
   // play sound effects
   useSound.value = getParam(params, 'useSound', PARAM_TYPES.BOOLEAN, defaults.useSound);
 
@@ -108,7 +131,7 @@ function updateGameSettingsFromHash() {
   if (getParam(params, 'devMode', PARAM_TYPES.BOOLEAN, false)) {
     gameState.value = GAME_STATES.PLAYING;
   } else {
-    gameState.value = GAME_STATES.READY
+    gameState.value = GAME_STATES.READY;
   }
 }
 
@@ -224,8 +247,9 @@ function playSound(s: string) {
       <PlanetOrange @click="handleClick(ITEMS.PLANET_ORANGE)" class="absolute cursor-pointer"
                     style="top: 20vh; left: 10%;" height="15vh" :animate="true"></PlanetOrange>
 
-      <PlanetOrange @click="handleClick(ITEMS.PLANET_ORANGE)" class="absolute cursor-pointer" style="top: 7vh; left: 80%;"
-                   height="12vh" :animate="true"></PlanetOrange>
+      <PlanetOrange @click="handleClick(ITEMS.PLANET_ORANGE)" class="absolute cursor-pointer"
+                    style="top: 7vh; left: 80%;"
+                    height="12vh" :animate="true"></PlanetOrange>
 
       <PlanetBlue @click="handleClick(ITEMS.PLANET_BLUE)" class="absolute cursor-pointer" style="top: 4vh; left: 42%;"
                   height="9vh" :animate="true"></PlanetBlue>
@@ -284,7 +308,6 @@ function playSound(s: string) {
             style="top: 48vh; left: 36%;"></Bone>
 
 
-
       <Worm height="3vh" @click="handleClick(ITEMS.WORM)" class="cursor-pointer absolute" style="top: 65vh; left: 52%"
             :animate="true"></Worm>
 
@@ -294,7 +317,8 @@ function playSound(s: string) {
       <Worm height="4vh" @click="handleClick(ITEMS.WORM)" class="cursor-pointer absolute" style="top: 14vh; left: 45%"
             :animate="true"></Worm>
 
-      <Treasure :animate="true" height="12vh" @click="handleClick(ITEMS.TREASURE)" class="cursor-pointer absolute" style="top: 56vh; left: 80%"></Treasure>
+      <Treasure :animate="true" height="12vh" @click="handleClick(ITEMS.TREASURE)" class="cursor-pointer absolute"
+                style="top: 56vh; left: 80%"></Treasure>
 
     </div>
   </div>
