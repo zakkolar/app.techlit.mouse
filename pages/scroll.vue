@@ -29,7 +29,7 @@ const defaults = {
 const timeLimit = ref(defaults.timeLimit),
     showPlayAgain = ref(defaults.showPlayAgain),
     useSound = ref(defaults.useSound),
-    disableArrowKeys = ref(defaults.disableArrowKeys)
+    disableArrowKeys = ref(defaults.disableArrowKeys),
 disableTouchScreen = ref(defaults.disableTouchScreen);
 
 // internal data
