@@ -29,6 +29,26 @@ const credits = ref([
     title: 'Pure CSS Animated Birds',
     author: 'Mark Bowley',
     url: 'https://codepen.io/Mark_Bowley/pen/PozwrN'
+  },
+  {
+    title: 'Pure CSS | Planet',
+    author: 'Zahra',
+    url: 'https://codepen.io/za-h-ra/pen/mdXEYRK'
+  },
+  {
+    title: 'CSS Rocket',
+    author: 'Suzanne Aitchison',
+    url: 'https://codepen.io/aitchiss/pen/OJMGqJr'
+  },
+  {
+    title: 'Simple CSS Bone',
+    author: 'SassTantrum',
+    url: 'https://codepen.io/sasstantrum/pen/deQQLm'
+  },
+  {
+    title: 'CSS Treasure',
+    author: 'James',
+    url: 'https://codepen.io/jamestrenda/pen/YzKmpLN'
   }
 ])
 </script>
