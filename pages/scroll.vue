@@ -141,7 +141,7 @@ const resetGame = () => {
   currentItem.value = null;
 }
 
-const numStars = ref(100);
+const numStars = ref(30);
 
 const ITEMS = {
   STAR: {
