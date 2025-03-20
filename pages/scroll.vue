@@ -81,16 +81,15 @@ onMounted(() => {
   window.addEventListener('hashchange', updateGameSettingsFromHash)
 
 
-  // document.addEventListener('keydown', (e) => {
-  //
-  //   if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-  //     if (disableArrowKeys.value) {
-  //       console.log('nope!')
-  //       e.preventDefault();
-  //     }
-  //   }
-  //
-  // })
+  document.addEventListener('keydown', (e) => {
+
+    if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+      if (disableArrowKeys.value) {
+        e.preventDefault();
+      }
+    }
+
+  })
 })
 
 function updateGameSettingsFromHash() {
