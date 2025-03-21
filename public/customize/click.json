@@ -45,6 +45,13 @@
       "type": "boolean",
       "default": true,
       "description": "Play a sound effect when the player collects a coin."
+    },
+    {
+      "label": "Disable Touch Screen",
+      "key": "disableTouchScreen",
+      "type": "boolean",
+      "default": false,
+      "description": "Prevent touch screen interactions"
     }
   ]
 

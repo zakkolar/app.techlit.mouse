@@ -30,7 +30,7 @@ const timeLimit = ref(defaults.timeLimit),
     showPlayAgain = ref(defaults.showPlayAgain),
     useSound = ref(defaults.useSound),
     disableArrowKeys = ref(defaults.disableArrowKeys),
-disableTouchScreen = ref(defaults.disableTouchScreen);
+    disableTouchScreen = ref(defaults.disableTouchScreen);
 
 // internal data
 const gameState = ref(GAME_STATES.LOADING),
