@@ -14,7 +14,7 @@ interface Phrase {
 
 const phrases: Phrase[] = [
   {
-    phrase: "Drag over the bold words to select them.",
+    phrase: "Can you select the bold words?",
     target: "bold"
   },
   {
@@ -186,12 +186,12 @@ function getHint(selection: string, target: string, phraseHints?: Record<string,
     const leading = selection[0] === ' ';
     const trailing = selection[selection.length - 1] === ' ';
     if (leading && trailing) {
-      return 'You included the spaces at the beginning and end. Try again without them!';
+      return 'You selected the spaces at the beginning and end. Try again without them!';
     }
     if (leading) {
-      return 'You included a space at the beginning. Try again without it!';
+      return 'You selected a space at the beginning. Try again without it!';
     }
-    return 'You included a space at the end. Try again without it!';
+    return 'You selected a space at the end. Try again without it!';
   }
 
   if (Math.abs(selection.length - target.length) === 1) {
@@ -207,8 +207,8 @@ function getHint(selection: string, target: string, phraseHints?: Record<string,
     if (diffChar) {
       if (isPunct(diffChar)) {
         return extra
-          ? `Try again! Don't include the "${diffChar}".`
-          : `So close! Make sure you include the "${diffChar}".`;
+          ? `Try again! Don't include the "${diffChar}"`
+          : `So close! Make sure you include the "${diffChar}"`;
       }
       const label = charLabel(diffChar);
       if (extra) {
@@ -219,31 +219,23 @@ function getHint(selection: string, target: string, phraseHints?: Record<string,
   }
 
   if (selection.length > target.length) {
-    if (selection.startsWith(target)) {
-      return 'So close! You have some extra text at the end.';
+    const extra = selection.length - target.length;
+    if (selection.startsWith(target) && extra <= 2) {
+      return 'So close! You have a little extra text at the end.';
     }
-    if (selection.endsWith(target)) {
-      return 'Try again! You have some extra text at the beginning.';
+    if (selection.endsWith(target) && extra <= 2) {
+      return 'So close! You have a little extra text at the beginning.';
     }
-    if (selection.includes(target)) {
-      if (selection.length - target.length === 2 && selection.slice(1, -1) === target) {
-        return 'Almost! You have a little extra text on both sides.';
-      }
-      return 'So close! You have some extra text at the beginning and end.';
+    if (selection.includes(target) && extra <= 2) {
+      return 'So close! You have a little extra text on both sides.';
     }
   }
   if (selection.length < target.length) {
     if (target.startsWith(selection)) {
-      return "You're missing some text at the end. Try one more time!";
+      return "You're missing text at the end. Try one more time!";
     }
     if (target.endsWith(selection)) {
-      return "You're missing some text at the beginning. Try again!";
-    }
-    if (target.includes(selection)) {
-      if (target.length - selection.length === 2 && target.slice(1, -1) === selection) {
-        return "Almost! You're missing a little text on both sides.";
-      }
-      return "So close! You're missing some letters at the start and end.";
+      return "You're missing text at the beginning. Try again!";
     }
   }
   return "Not quite! Click anywhere in the white area to clear your selection and try again.";
