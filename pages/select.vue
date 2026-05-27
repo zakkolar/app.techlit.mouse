@@ -238,7 +238,7 @@ function getHint(selection: string, target: string, phraseHints?: Record<string,
       return "You're missing text at the beginning. Try again!";
     }
   }
-  return "Not quite! Click anywhere in the white area to clear your selection and try again.";
+  return "Not quite! Click anywhere in the background to clear your selection and try again.";
 }
 
 function checkSelection(event: Event) {
