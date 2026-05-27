@@ -48,8 +48,8 @@ const phrases = [
     target: "these three words"
   },
   {
-    phrase: "Now select everything except the period.",
-    target: "Now select everything except the period"
+    phrase: "Now select everything EXCEPT the period.",
+    target: "Now select everything EXCEPT the period"
   },
   {
     phrase: "Did you know there's another creature hidden in panther?",
