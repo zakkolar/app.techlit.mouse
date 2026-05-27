@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29">
+  <rect width="29" height="29" fill="transparent"/>
+  <path d="M7.5 2.5 L7.5 22.5 L12.5 17.5 L16.5 26.5 L19.5 25 L15.5 16 L21.5 16 Z"
+        fill="black"
+        stroke="white"
+        stroke-width="5"
+        stroke-linejoin="round"
+        paint-order="stroke fill"/>
+</svg>
