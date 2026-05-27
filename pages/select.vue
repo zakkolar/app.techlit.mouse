@@ -251,7 +251,7 @@ function checkSelection(event: Event) {
   }
 
   const selection = window.getSelection();
-  currentSelection.value = selection?.toString() ?? "";
+  currentSelection.value = (selection?.toString() ?? "").replace(/[\n\r]/g, '');
 
   if (currentSelection.value && !selectionCorrect.value) {
     hint.value = getHint(currentSelection.value, currentTarget.value, phrases[currentPhraseIndex.value].hints);
