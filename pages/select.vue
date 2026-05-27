@@ -261,6 +261,7 @@ function checkSelection(event: Event) {
 
   if (selectionCorrect.value && !transitioning.value) {
     transitioning.value = true;
+    window.getSelection()?.removeAllRanges();
     const target = document.getElementById('target');
     if (target) {
 
