@@ -221,21 +221,24 @@ function getHint(selection: string, target: string, phraseHints?: Record<string,
   if (selection.length > target.length) {
     const extra = selection.length - target.length;
     if (selection.startsWith(target) && extra <= 2) {
-      return 'So close! You have a little extra text at the end.';
+      return 'So close! You went a little past the bold part.';
     }
     if (selection.endsWith(target) && extra <= 2) {
-      return 'So close! You have a little extra text at the beginning.';
+      return 'So close! You started a little before the bold part.';
     }
     if (selection.includes(target) && extra <= 2) {
-      return 'So close! You have a little extra text on both sides.';
+      return 'You selected too much! Click anywhere in the background to clear your selection and try again.';
     }
   }
   if (selection.length < target.length) {
     if (target.startsWith(selection)) {
-      return "You're missing text at the end. Try one more time!";
+      return "You didn't get all the way to the end. Try one more time!";
     }
     if (target.endsWith(selection)) {
-      return "You're missing text at the beginning. Try again!";
+      return "You missed the beginning. Try again!";
+    }
+    if (target.includes(selection)) {
+      return "Make sure you select everything that's bold!";
     }
   }
   return "Not quite! Click anywhere in the background to clear your selection and try again.";
