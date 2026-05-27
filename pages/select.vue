@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { hashToParams, getParam, PARAM_TYPES } from '~/utilities/UrlParams';
+import { getMinutes, getSeconds } from '~/utilities/MinutesAndSeconds';
+import StartScreen from '~/components/StartScreen.vue';
+import EndScreen from '~/components/EndScreen.vue';
 
-import {onMounted} from "vue";
+enum GAME_STATES { LOADING, READY, PLAYING, GAME_OVER }
 
-const phrases = [
+interface Phrase {
+  phrase: string;
+  target: string;
+  hints?: Record<string, string>;
+}
+
+const phrases: Phrase[] = [
   {
     phrase: "Drag over the bold words to select them.",
     target: "bold"
@@ -29,7 +39,10 @@ const phrases = [
   },
   {
     phrase: "Now try just the middle of a word.",
-    target: "iddl"
+    target: "iddl",
+    hints: {
+      "middle": "Just select the letters \"iddl\" - not the whole word!",
+    }
   },
   {
     phrase: "You're a selecting superstar!",
@@ -53,7 +66,10 @@ const phrases = [
   },
   {
     phrase: "Did you know there's another creature hidden in panther?",
-    target: "ant"
+    target: "ant",
+    hints: {
+      "panther": "Try again - just select the letters \"ant\"!",
+    }
   },
   {
     phrase: "You make this look so easy!",
@@ -61,13 +77,35 @@ const phrases = [
   },
   {
     phrase: "Can you find this one?",
-    target: "y"
+    target: "y",
+    hints: {
+      "you": "Try again - just select the \"y\" in \"you\"",
+    }
   },
   {
     phrase: "I'll bet you can't guess what's next...",
     target: "can't guess"
   }
 ]
+
+const defaults = {
+  timeLimit: 60,
+  showPlayAgain: false,
+}
+
+const gameState = ref(GAME_STATES.LOADING);
+const timeLimit = ref(defaults.timeLimit);
+const showPlayAgain = ref(defaults.showPlayAgain);
+const timeRemaining = ref(defaults.timeLimit);
+const minutes = computed(() => getMinutes(timeRemaining.value));
+const seconds = computed(() => getSeconds(timeRemaining.value));
+
+const currentPhraseIndex = ref(0);
+const hint = ref("");
+const currentSelection = ref("");
+const transitioning = ref(false);
+const collectedPhrases = ref(0);
+const isSelecting = ref(false);
 
 const nextPhrase = () => {
   currentPhraseIndex.value++;
@@ -76,55 +114,182 @@ const nextPhrase = () => {
   }
 }
 
-const currentPhraseIndex = ref(0);
-
-const currentPhrase = computed(() => {
-  return phrases[currentPhraseIndex.value].phrase;
-})
-
 const currentTarget = computed(() => {
   return phrases[currentPhraseIndex.value].target;
 })
 
 const currentMarkup = computed(() => {
-  return currentPhrase.value
-      .replace(currentTarget.value, `<span id='target'>${currentTarget.value}</span>`)
+  const phrase = phrases[currentPhraseIndex.value];
+  return phrase.phrase.replace(phrase.target, `<span id='target'>${phrase.target}</span>`);
 })
 
 const selectionCorrect = computed(() => {
   return currentSelection.value === currentTarget.value;
 })
 
-const currentSelection = ref("");
+function resetGame() {
+  currentPhraseIndex.value = 0;
+  collectedPhrases.value = 0;
+  timeRemaining.value = timeLimit.value;
+  hint.value = '';
+  transitioning.value = false;
+}
 
-const transitioning = ref(false);
+function startGame() {
+  gameState.value = GAME_STATES.PLAYING;
+  updateTimer();
+}
 
-const collectedPhrases = ref(0);
+function playAgain() {
+  resetGame();
+  gameState.value = GAME_STATES.READY;
+}
 
-function checkSelection() {
+function checkGameOver() {
+  if (timeRemaining.value === 0 && !isSelecting.value && !transitioning.value) {
+    gameState.value = GAME_STATES.GAME_OVER;
+  }
+}
+
+function updateTimer() {
+  if (gameState.value === GAME_STATES.PLAYING) {
+    if (timeRemaining.value > 0) {
+      timeRemaining.value--;
+      setTimeout(updateTimer, 1000);
+    } else {
+      checkGameOver();
+    }
+  }
+}
+
+function updateGameSettingsFromHash() {
+  const params = hashToParams();
+  timeLimit.value = getParam(params, 'timeLimit', PARAM_TYPES.INTEGER, defaults.timeLimit);
+  showPlayAgain.value = getParam(params, 'showPlayAgain', PARAM_TYPES.BOOLEAN, defaults.showPlayAgain);
+  resetGame();
+  gameState.value = GAME_STATES.READY;
+}
+
+function charLabel(c: string): string {
+  if (/[a-zA-Z]/.test(c)) { return 'letter'; }
+  if (/[0-9]/.test(c)) { return 'number'; }
+  if (c === ' ') { return 'space'; }
+  return `"${c}"`;
+}
+
+function getHint(selection: string, target: string, phraseHints?: Record<string, string>): string {
+  if (phraseHints?.[selection]) {
+    return phraseHints[selection];
+  }
+
+  if (selection.trim() === target) {
+    const leading = selection[0] === ' ';
+    const trailing = selection[selection.length - 1] === ' ';
+    if (leading && trailing) {
+      return 'You included the spaces at the beginning and end. Try again without them!';
+    }
+    if (leading) {
+      return 'You included a space at the beginning. Try again without it!';
+    }
+    return 'You included a space at the end. Try again without it!';
+  }
+
+  if (Math.abs(selection.length - target.length) === 1) {
+    const isPunct = (c: string) => /[^\w\s]/.test(c);
+    const extra = selection.length > target.length;
+    const longer = extra ? selection : target;
+    const shorter = extra ? target : selection;
+    let diffChar = '';
+    let diffPos: 'start' | 'end' | '' = '';
+    if (longer.slice(1) === shorter) { diffChar = longer[0]; diffPos = 'start'; }
+    else if (longer.slice(0, -1) === shorter) { diffChar = longer[longer.length - 1]; diffPos = 'end'; }
+
+    if (diffChar) {
+      if (isPunct(diffChar)) {
+        return extra
+          ? `Try again! Don't include the "${diffChar}".`
+          : `So close! Make sure you include the "${diffChar}".`;
+      }
+      const label = charLabel(diffChar);
+      if (extra) {
+        return diffPos === 'start' ? `Almost! You have an extra ${label} at the beginning.` : `Almost! You have an extra ${label} at the end.`;
+      }
+      return diffPos === 'start' ? `Almost! You're missing a ${label} at the beginning.` : `Almost! You're missing a ${label} at the end.`;
+    }
+  }
+
+  if (selection.length > target.length) {
+    if (selection.startsWith(target)) {
+      return 'So close! You have some extra text at the end.';
+    }
+    if (selection.endsWith(target)) {
+      return 'Try again! You have some extra text at the beginning.';
+    }
+    if (selection.includes(target)) {
+      if (selection.length - target.length === 2 && selection.slice(1, -1) === target) {
+        return 'Almost! You have a little extra text on both sides.';
+      }
+      return 'So close! You have some extra text at the beginning and end.';
+    }
+  }
+  if (selection.length < target.length) {
+    if (target.startsWith(selection)) {
+      return "You're missing some text at the end. Try one more time!";
+    }
+    if (target.endsWith(selection)) {
+      return "You're missing some text at the beginning. Try again!";
+    }
+    if (target.includes(selection)) {
+      if (target.length - selection.length === 2 && target.slice(1, -1) === selection) {
+        return "Almost! You're missing a little text on both sides.";
+      }
+      return "So close! You're missing some letters at the start and end.";
+    }
+  }
+  return "Not quite! Click anywhere in the white area to clear your selection and try again.";
+}
+
+function checkSelection(event: Event) {
+  if (gameState.value !== GAME_STATES.PLAYING) { return; }
+
+  if (event.type === 'mousedown') {
+    isSelecting.value = true;
+  } else if (event.type === 'mouseup') {
+    isSelecting.value = false;
+  }
+
   const selection = window.getSelection();
   currentSelection.value = selection?.toString() ?? "";
+
+  if (currentSelection.value && !selectionCorrect.value) {
+    hint.value = getHint(currentSelection.value, currentTarget.value, phrases[currentPhraseIndex.value].hints);
+  } else {
+    hint.value = "";
+  }
 
   if (selectionCorrect.value && !transitioning.value) {
     transitioning.value = true;
     const target = document.getElementById('target');
-    const clone = target?.cloneNode(true) as HTMLElement;
-    const phraseEl = document.getElementById('phrase');
-    if (clone && phraseEl && target) {
+    if (target) {
 
       const rect = target.getBoundingClientRect();
 
       target.classList.add('correct');
 
+      const clone = document.createElement('div');
       clone.classList.add('clone');
       clone.style.top = `${rect.top}px`;
       clone.style.left = `${rect.left}px`;
       clone.style.width = `${rect.width}px`;
       clone.style.height = `${rect.height}px`;
 
+      const inner = document.createElement('span');
+      inner.textContent = target.textContent;
+      inner.classList.add('clone-inner');
+      clone.appendChild(inner);
+
       document.body.appendChild(clone);
 
-      // Vector to top-right corner
       const tx = window.innerWidth - rect.left - rect.width;
       const ty = 0 - rect.top - rect.height;
 
@@ -134,7 +299,6 @@ function checkSelection() {
           opacity: 1,
         },
         {
-          // Brief "grabbed" recoil before flying off
           offset: 0.1,
           transform: 'translate(0, 0) rotate(-5deg) scale(1.07)',
           opacity: 1,
@@ -164,45 +328,58 @@ function checkSelection() {
         transitioning.value = false;
         collectedPhrases.value++;
         nextPhrase();
+        checkGameOver();
       };
     }
+  }
+
+  if (event.type === 'mouseup') {
+    checkGameOver();
   }
 }
 
 const events = ['mouseup', 'mousedown', 'keyup'];
 
 onMounted(() => {
-
-  events.forEach(e => {
-    window.addEventListener(e, checkSelection);
-  })
+  window.addEventListener('hashchange', updateGameSettingsFromHash);
+  updateGameSettingsFromHash();
+  events.forEach(e => window.addEventListener(e, checkSelection));
 })
 
 onBeforeUnmount(() => {
-  events.forEach(e => {
-    window.removeEventListener(e, checkSelection);
-  })
+  window.removeEventListener('hashchange', updateGameSettingsFromHash);
+  events.forEach(e => window.removeEventListener(e, checkSelection));
 })
 
 </script>
 
 <template>
-  <div class="text-gray-900">
-    <!--  <div v-if="gameState !== GAME_STATES.GAME_OVER">-->
-    <!--    <div class="absolute left-2 top-2 text-5xl">{{ minutes }}:{{ seconds }}</div>-->
-    <div id="phraseCount" class="select-none absolute right-2 top-2 text-5xl">Score: {{ collectedPhrases }}</div>
-    <!--  </div>-->
-    <div class="text-center justify-center h-screen items-center flex w-full max-w-4xl text-6xl mx-auto">
-
-      <div id="phrase" class="selection:bg-blue-500 selection:text-white" v-html="currentMarkup"></div>
-
+  <div class="text-gray-900 bg-purple-100 h-screen w-screen">
+    <div v-if="gameState !== GAME_STATES.GAME_OVER">
+      <div class="absolute left-2 top-2 text-5xl select-none">{{ minutes }}:{{ seconds }}</div>
     </div>
+    <div id="phraseCount" class="select-none absolute right-2 top-2 text-5xl">Score: {{ collectedPhrases }}</div>
+
+    <StartScreen v-if="gameState === GAME_STATES.READY" title="Select" @start="startGame">
+      Click and drag over the <span class="target">bold</span> words to select them. Select as many as you can before the timer runs out!
+    </StartScreen>
+
+    <div v-if="gameState === GAME_STATES.PLAYING" class="text-center justify-center h-screen items-center flex flex-col w-full max-w-4xl mx-auto">
+      <div class="relative">
+        <div id="phrase" class="text-6xl selection:bg-purple-500 selection:text-white" v-html="currentMarkup"></div>
+        <div v-if="hint" class="absolute text-3xl w-full text-center mt-10 top-full">{{ hint }}</div>
+      </div>
+    </div>
+
+    <EndScreen v-if="gameState === GAME_STATES.GAME_OVER" title="Time's up!" :button="showPlayAgain" @play-again="playAgain">
+      You selected {{ collectedPhrases }} phrase{{ collectedPhrases === 1 ? '' : 's' }}!
+    </EndScreen>
   </div>
 </template>
 
 <style>
 
-#target {
+#target, .target {
   @apply font-bold underline underline-offset-8 decoration-gray-600 decoration-dotted decoration-2
 }
 
@@ -214,7 +391,14 @@ onBeforeUnmount(() => {
   position: fixed;
   pointer-events: none;
   z-index: 9999;
-  white-space: nowrap;
-  @apply bg-blue-500 text-white text-6xl;
+  @apply text-6xl text-center;
+}
+
+.clone-inner {
+  @apply bg-purple-500;
+  color: white;
+  font-weight: bold;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 </style>
