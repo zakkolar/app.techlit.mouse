@@ -4,6 +4,17 @@ import { getMinutes, getSeconds } from '~/utilities/MinutesAndSeconds';
 import StartScreen from '~/components/StartScreen.vue';
 import EndScreen from '~/components/EndScreen.vue';
 
+useHead({
+  title: 'Word Selector',
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: '/icons/cursor.svg'
+    }
+  ]
+})
+
 enum GAME_STATES { LOADING, READY, PLAYING, GAME_OVER }
 
 interface Phrase {
@@ -22,7 +33,7 @@ const phrases: Phrase[] = [
     target: "one"
   },
   {
-    phrase: "Can you do two words at once?",
+    phrase: "Can you select two words at once?",
     target: "two words"
   },
   {

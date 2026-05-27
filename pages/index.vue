@@ -27,6 +27,15 @@ const games = ref([
     documentation: "https://docs.techlit.tools/mouse-games/scroll/",
     thumbnail: "/images/bird.png",
     thumbnailAlt: "Illustration of a pink cartoon bird against a blue sky."
+  }, {
+    title: "Word Selector",
+    subtitle: "Selecting practice",
+    description: "Select as many words as you can before the time runs out.",
+    page: "/select",
+    customize: "https://customize.techlit.tools/#url=https://mouse.techlit.tools/customize/select.json",
+    documentation: "https://docs.techlit.tools/mouse-games/select/",
+    thumbnail: "/images/cursor.svg",
+    thumbnailAlt: "Illustration of text with a word highlighted in purple."
   }
 ])
 </script>
