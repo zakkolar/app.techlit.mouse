@@ -360,7 +360,7 @@ onBeforeUnmount(() => {
     <div v-if="gameState === GAME_STATES.PLAYING" class="text-center justify-center h-screen items-center flex flex-col w-full max-w-4xl mx-auto">
       <div class="relative">
         <div id="phrase" class="text-6xl selection:bg-purple-500 selection:text-white" v-html="currentMarkup"></div>
-        <div v-if="hint" class="absolute text-3xl w-full text-center mt-10 top-full">{{ hint }}</div>
+        <div v-if="hint" class="absolute select-none text-3xl w-full text-center mt-10 top-full">{{ hint }}</div>
       </div>
     </div>
 
